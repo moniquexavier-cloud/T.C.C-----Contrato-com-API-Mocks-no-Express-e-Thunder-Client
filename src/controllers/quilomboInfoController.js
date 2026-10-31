@@ -31,16 +31,29 @@ const mockQuilomboInfo = {
   }
 };
 
-// Controller das informação sobre os quilombos
-const getQuilomboInfo = async (req, res) => {
-  try {
-    return res.status(200).json(mockQuilomboInfo);
-  } catch (error) {
-    return res.status(500).json({
-      mensagem: "Erro interno ao obter informações do quilombo.",
-      erro: error.message
-    });
-  }
+const getQuilomboInfo = (req, res) => {
+    try {
+        const nome = ['Cordoaria', 'Quingoma'].find(
+            quilombo => quilombo.toLocaleLowerCase('pt-BR') ===
+                req.params.nome.trim().toLocaleLowerCase('pt-BR')
+        );
+
+        if (!nome) {
+            return res.status(404).json({
+                mensagem: 'Quilombo não encontrado.'
+            });
+        }
+
+        return res.status(200).json({
+            nome,
+            ...mockQuilomboInfo
+        });
+    } catch (error) {
+        return res.status(500).json({
+            mensagem: "Erro interno ao obter informações do quilombo.",
+            erro: error.message
+        });
+    }
 };
 
-export { getQuilomboInfo};
+export { getQuilomboInfo };

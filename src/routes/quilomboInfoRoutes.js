@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import { getQuilomboInfo } from '../controllers/quilomboInfoController.js';
+import { nomeQuilomboSchema, validate } from '../middleware/validators.js';
 
 const router = Router();
 
 // Rota GET para listar as informações do quilombo
-router.get('/', getQuilomboInfo);
+router.get('/:nome', validate(nomeQuilomboSchema, 'params'), getQuilomboInfo);
 
 export default router;
